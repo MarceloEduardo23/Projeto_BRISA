@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Realizado com Sucesso!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos básicos para os ícones (Lucide style) */
+        .lucide {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Cores base do Tailwind (exemplo para consistência) */
+        :root {
+            --primary: #007bff; /* Exemplo de azul primário */
+            --green-success: #22c55e; /* green-500 do Tailwind */
+            --gray-text: #6b7280; /* gray-600 do Tailwind */
+        }
+        
+        .bg-card { background-color: white; }
+        .text-card-foreground { color: #1f2937; }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+        .text-muted-foreground { color: #6b7280; } /* Cor para descrições */
+        .bg-border { background-color: #e5e7eb; } /* Cor para separadores */
+
+        /* Ícone de check-circle maior para o topo */
+        .check-circle-large {
+            display: inline-block;
+            width: 3rem; /* Tamanho maior */
+            height: 3rem; /* Tamanho maior */
+            mask-size: cover;
+            mask-repeat: no-repeat;
+            background-color: var(--green-success); /* Cor verde */
+            -webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lSm9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZWNrLWNpcmNsZSI+PHBhdGggZD0iTTIyIDExLjA4VjEyYTEwIDEwIDAgMSAxLTUuOTMtOS4xNCIvPjxwb2x5bGluZSBwb2ludHM9IjIyIDQgMTIgMTQgOSAxMSIvPjwvc3ZnPg==');
+            mask-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lSm9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZWNrLWNpcmNsZSI+PHBhdGggZD0iTTIyIDExLjA4VjEyYTEwIDEwIDAgMSAxLTUuOTMtOS4xNCIvPjxwb2x5bGluZSBwb2ludHM9IjIyIDQgMTIgMTQgOSAxMSIvPjwvc3ZnPg==');
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <div class="flex justify-center mb-4">
+                    <span class="check-circle-large"></span>
+                </div>
+                <h1 class="text-3xl font-extrabold text-gray-900">Pagamento Realizado com Sucesso!</h1>
+                <p class="mt-2 text-sm text-gray-600">
+                    Seu pedido foi processado e você receberá uma confirmação por email
+                </p>
+            </div>
+
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                <div class="flex flex-col space-y-1.5 p-6">
+                    <h3 class="text-2xl font-semibold leading-none tracking-tight">Detalhes do Pedido</h3>
+                    <p class="text-sm text-muted-foreground">Informações sobre sua compra</p>
+                </div>
+                <div class="p-6 pt-0 space-y-4">
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <p class="font-medium text-gray-700">Número do Pedido</p>
+                            <p id="order-id-display" class="text-gray-900">Carregando...</p>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-700">Data do Pedido</p>
+                            <p id="order-date" class="text-gray-900"></p>
+                        </div>
+                    </div>
+
+                    <div class="shrink-0 bg-border h-[1px] w-full my-4"></div>
+
+                    <div id="order-summary-items" class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-700">Carregando itens...</span>
+                            <span class="font-medium text-gray-900"></span>
+                        </div>
+                    </div>
+
+                    <div class="shrink-0 bg-border h-[1px] w-full my-4"></div>
+
+                    <div class="flex justify-between font-bold text-lg">
+                        <span class="text-gray-800">Total Pago</span>
+                        <span id="total-paid-display" class="text-gray-900">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+                <div class="flex flex-col space-y-1.5 p-6">
+                    <h3 class="text-2xl font-semibold leading-none tracking-tight">Próximos Passos</h3>
+                </div>
+                <div class="p-6 pt-0 space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail h-5 w-5 text-gray-600 mt-0.5 shrink-0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        <div>
+                            <p class="font-medium text-gray-700">Confirmação por Email</p>
+                            <p class="text-sm text-muted-foreground">Você receberá um email de confirmação com todos os detalhes do pedido</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package h-5 w-5 text-gray-600 mt-0.5 shrink-0"><path d="m7.5 4.27 9 5.15"/><path d="M2.5 8.63 7.5 11 12.5 8.63"/><path d="M12.5 11l-5 2.37L2.5 11"/><path d="m16.5 19.73-9-5.15"/><path d="M21.5 15.37 16.5 12.87 11.5 15.37"/><path d="M11.5 12.87l5 2.36 5-2.36"/><path d="M7.5 11v5.36"/><path d="M16.5 12.87V18"/></svg>
+                        <div>
+                            <p class="font-medium text-gray-700">Preparação do Pedido</p>
+                            <p class="text-sm text-muted-foreground">Seu pedido será preparado e enviado em até 2 dias úteis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between space-x-4">
+                <a href="/" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex-grow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left mr-2 h-4 w-4"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                    Voltar ao Início
+                </a>
+                <button type="button" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-black text-white hover:bg-gray-800 h-10 px-4 py-2 flex-grow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download mr-2 h-4 w-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                    Baixar Comprovante
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentId = urlParams.get('payment_id');
+            const paymentStatus = urlParams.get('status');
+
+            const orderDateElement = document.getElementById('order-date');
+            if (orderDateElement) {
+                const today = new Date();
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const year = today.getFullYear();
+                orderDateElement.textContent = `${day}/${month}/${year}`;
+            }
+            
+            const orderNumberElement = document.getElementById('order-id-display');
+            if (orderNumberElement && paymentId) {
+                orderNumberElement.textContent = paymentId;
+            }
+
+            function formatCurrency(value, currency = 'R$') {
+                return `${currency} ${parseFloat(value).toFixed(2).replace('.', ',')}`;
+            }
+
+            // Se tivermos um paymentId e o status for aprovado, buscamos os detalhes
+            if (paymentId && paymentStatus === 'approved') {
+                fetch(`/api/order_details?id=${paymentId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            // Se a resposta não for OK, lança um erro com a mensagem do servidor
+                            return response.json().then(err => { throw new Error(err.error || 'Erro desconhecido ao buscar detalhes.'); });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const orderSummaryItems = document.getElementById('order-summary-items');
+                        const totalPaidDisplay = document.getElementById('total-paid-display');
+                        
+                        orderSummaryItems.innerHTML = ''; 
+
+                        if (data.itens && data.itens.length > 0) {
+                            data.itens.forEach(item => {
+                                const itemDiv = document.createElement('div');
+                                itemDiv.className = 'flex justify-between';
+                                itemDiv.innerHTML = `
+                                    <span class="text-gray-700">${item.nome} (${item.quantidade}x)</span>
+                                    <span class="font-medium text-gray-900">${formatCurrency(item.total_item)}</span>
+                                `;
+                                orderSummaryItems.appendChild(itemDiv);
+                            });
+                        } else {
+                            orderSummaryItems.innerHTML = '<div class="text-gray-700">Nenhum item detalhado disponível.</div>';
+                        }
+
+                        totalPaidDisplay.textContent = formatCurrency(data.total_pago);
+
+                    })
+                    .catch(err => {
+                        console.error("Falha ao buscar detalhes do pedido:", err.message);
+                        const orderSummaryItems = document.getElementById('order-summary-items');
+                        orderSummaryItems.innerHTML = `<div class="text-red-500">Erro ao carregar detalhes do pedido: ${err.message}.</div>`;
+                        document.getElementById('total-paid-display').textContent = 'N/A';
+                    });
+            } else if (paymentStatus === 'cancel' || paymentStatus === 'error') {
+                const orderSummaryItems = document.getElementById('order-summary-items');
+                orderSummaryItems.innerHTML = '<div class="text-gray-700">Não foi possível exibir os detalhes do pedido, pois o pagamento não foi aprovado ou foi cancelado.</div>';
+                document.getElementById('total-paid-display').textContent = 'N/A';
+                if (orderNumberElement) {
+                     orderNumberElement.textContent = 'Falha no Pagamento';
+                }
+            } else {
+                 const orderSummaryItems = document.getElementById('order-summary-items');
+                orderSummaryItems.innerHTML = '<div class="text-gray-700">Aguardando confirmação do pagamento ou ID do pedido.</div>';
+                document.getElementById('total-paid-display').textContent = 'N/A';
+                 if (orderNumberElement) {
+                     orderNumberElement.textContent = 'Aguardando...';
+                }
+            }
+
+            // Limpa o carrinho no localStorage após uma compra bem-sucedida
+            // Isso evita que o usuário volte ao checkout e o carrinho ainda esteja cheio
+            if (paymentStatus === 'approved') {
+                localStorage.removeItem('checkoutItems');
+            }
+        });
+    </script>
+</body>
+</html>
