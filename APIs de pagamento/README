@@ -1,1 +1,103 @@
 
+Gateway de Pagamentos com Flask
+Este projeto é um backend em Python que serve como um gateway de pagamentos centralizado, integrando Stripe, PayPal e Mercado Pago. A aplicação é construída com Flask e organizada em uma arquitetura de serviços para facilitar a manutenção e escalabilidade.
+
+✨ Funcionalidades
+Múltiplos Gateways: Suporte nativo para Stripe, PayPal e Mercado Pago (Cartão e Pix).
+
+Checkout por Redirecionamento: Criação de links de pagamento que direcionam o usuário para um ambiente seguro do provedor escolhido.
+
+Processamento de Webhooks: Endpoint dedicado e seguro para receber e validar notificações do Stripe, confirmando pagamentos de forma assíncrona.
+
+Configuração Segura: Utiliza variáveis de ambiente (.env) para gerenciar chaves de API e outras informações sensíveis.
+
+🚀 Guia de Instalação e Execução (Passo a Passo)
+Siga estes passos para configurar e executar o projeto em seu ambiente local.
+
+Passo 1: Clonar o Repositório
+git clone ...
+
+Passo 2: Criar e Ativar o Ambiente Virtual
+O uso de um ambiente virtual é crucial para isolar as dependências do projeto.
+
+# Crie o ambiente virtual
+python -m venv venv
+
+# Ative o ambiente
+# No Windows:
+venv\Scripts\activate
+# No macOS/Linux:
+source venv/bin/activate
+
+Passo 3: Instalar as Dependências
+Com o ambiente ativado, instale todas as bibliotecas necessárias com um único comando:
+
+pip install -r requirements.txt
+
+Passo 4: Configurar as Variáveis de Ambiente
+Este é o passo mais importante. Suas chaves de API secretas serão armazenadas aqui.
+
+Abra o arquivo .env e preencha TODAS as variáveis com suas próprias credenciais de desenvolvedor (sandbox/teste) de cada serviço.
+
+Passo 5: Configurar o Ngrok (Essencial para Testes)
+Para que os serviços de pagamento (especialmente os webhooks do Stripe) possam se comunicar com sua máquina local, você precisa expor seu servidor local à internet. A ferramenta perfeita para isso é o Ngrok.
+
+Crie uma conta: Vá para o site do Ngrok e crie uma conta gratuita.
+
+Baixe o Ngrok: Siga as instruções no dashboard para baixar o executável do Ngrok para o seu sistema operacional.
+
+Conecte sua conta: Execute o comando de autenticação que o dashboard do Ngrok fornece (geralmente algo como ./ngrok config add-authtoken SEU_TOKEN).
+
+Inicie o túnel: Com sua aplicação Flask ainda NÃO rodando, inicie o Ngrok para redirecionar para a porta 5000 (a porta padrão do Flask).
+
+./ngrok http 5000
+
+Copie a URL: O Ngrok exibirá uma tela com várias informações. Copie a URL Forwarding que termina com .ngrok-free.app (use a que começa com https):
+
+Atualize o .env: Cole a URL que você copiou no campo NGROK_URL dentro do seu arquivo .env.
+
+# .env
+NGROK_URL="https://SUA_URL_AQUI.ngrok-free.app"
+
+Passo 6: Executar a Aplicação
+Agora, com o Ngrok rodando em um terminal e o .env totalmente configurado, abra outro terminal, ative o ambiente virtual (se ainda não estiver ativo) e inicie a aplicação Flask:
+
+flask run
+
+Sua aplicação estará rodando localmente na porta 5000 e acessível publicamente através da sua URL do Ngrok!
+
+📖 Como Usar
+Para criar um pagamento, envie uma requisição POST para o endpoint /create_payment com um corpo JSON.
+
+Endpoint: /create_payment
+
+Método: POST
+
+Corpo da Requisição (Exemplo):
+
+{
+  "payment_method": "stripe",
+  "items": [
+    { "name": "Smartphone Premium", "quantity": 1 },
+    { "name": "Fones de Ouvido Bluetooth", "quantity": 1 }
+  ],
+  "user_data": {
+    "email": "cliente.teste@email.com",
+    "name": "Fulano de Tal"
+  }
+}
+
+Resposta de Sucesso: A API retornará uma URL de pagamento para a qual você deve redirecionar o usuário.
+
+{
+  "redirect_url": "https://checkout.stripe.com/pay/cs_test_..."
+}
+
+🪝 Webhooks
+Para que os webhooks do Stripe funcionem, você precisa registrar a URL do seu webhook no Dashboard do Stripe.
+
+URL do Endpoint: SUA_URL_DO_NGROK/webhook-stripe (ex: https://abcd-1234.ngrok-free.app/webhook-stripe)
+
+Eventos para escutar: Selecione o evento checkout.session.completed.
+
+Quando um pagamento for concluído, o Stripe enviará uma notificação para essa URL, e você verá a mensagem "SUCESSO (Webhook Stripe)..." no terminal onde sua aplicação Flask está rodando.
