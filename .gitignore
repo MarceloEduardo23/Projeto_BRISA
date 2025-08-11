@@ -1,0 +1,23 @@
+@"
+# Configurações sensíveis
+config.py
+
+# Ambiente virtual
+venv/
+.env/
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs e temporários
+*.log
+*.tmp
+*.swp
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+"@ > .gitignore
