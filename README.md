@@ -32,8 +32,8 @@ pycommerce/
 
 1. **Clone o repositório**:
    ```bash
-   git clone ...
-
+   git clone https://github.com/MarceloEduardo23/Projeto_BRISA.git
+   
 2. **Crie um ambiente virtual**:
     ```bash
     python -m venv venv
